@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hebtu.mapper.TaskMapper">
+
+    <!--task的映射结果集-->
+    <resultMap type="com.hebtu.entity.Task" id="TaskMap">
+        <result property="taskId" column="task_id" jdbcType="INTEGER"/>
+        <result property="createUserId" column="create_user_id" jdbcType="INTEGER"/>
+        <result property="taskName" column="task_name" jdbcType="VARCHAR"/>
+        <result property="createUserName" column="create_user_name" jdbcType="VARCHAR"/>
+        <result property="notice" column="notice" jdbcType="VARCHAR"/>
+        <result property="deadTime" column="dead_time" jdbcType="TIMESTAMP"/>
+    </resultMap>
+    
+    <!--全部字段-->
+    <sql id="allColumn"> task_id, task_name,create_user_id, create_user_name, notice, dead_time </sql>
+    
+    <!--添加语句的字段列表-->
+    <sql id="insertColumn">
+        <if test="taskName != null and taskName != ''">
+                task_name,
+        </if>
+        <if test="createUserName != null and createUserName !=''">
+                create_user_name,
+        </if>
+        <if test="createUserId != null">
+            create_user_id,
+        </if>
+        <if test="notice != null and notice != ''">
+            notice,
+        </if>
+        <if test="deadTime != null">
+            dead_time,
+        </if>
+    </sql>
+    
+    <!--添加语句的值列表-->
+        <sql id="insertValue">
+        <if test="taskName != null and taskName != ''">
+                #{taskName},
+        </if>
+        <if test="createUserName != null and createUserName !=''">
+                #{createUserName},
+        </if>
+        <if test="createUserId != null">
+                #{createUserId},
+        </if>
+        <if test="notice != null and notice != ''">
+                #{notice},
+        </if>
+        <if test="deadTime != null">
+                #{deadTime},
+        </if>
+    </sql>
+    
+    <!--通用对Task各个属性的值的非空判断-->
+    <sql id="commonsValue">
+        <if test="taskName != null and taskName != ''">
+                task_name = #{taskName},
+        </if>
+        <if test="createUserName != null and createUserName !=''">
+                create_user_name = #{createUserName},
+        </if>
+        <if test="createUserId != null">
+                create_user_id = #{createUserId},
+        </if>
+        <if test="notice != null and notice != ''">
+                notice=#{notice},
+        </if>
+        <if test="deadTime != null ">
+            dead_time=#{deadTime},
+        </if>
+    </sql>
+    
+    <!--新增task:哪个字段不为空就添加哪列数据,返回自增主键-->
+    <insert id="insert" keyProperty="taskId" useGeneratedKeys="true">
+        insert into task
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <include refid="insertColumn"/>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <include refid="insertValue"/>
+        </trim>
+    </insert>
+   
+    <!--删除task:通过主键-->
+    <delete id="deleteById">
+        delete from task
+        <where>
+            task_id = #{taskId}
+        </where>
+    </delete>
+    
+    <!--查询单个task-->
+    <select id="queryByTaskId" resultMap="TaskMap">
+        select
+        <include refid="allColumn"></include>
+        from task
+        <where>
+            task_id = #{taskId}
+        </where>
+    </select>
+
+    <!--查询单个task-->
+    <select id="queryByUserId" resultMap="TaskMap">
+        select
+        <include refid="allColumn"></include>
+        from task
+        <where>
+            user_id = #{userId}
+        </where>
+    </select>
+
+    <!--查询所有task-->
+    <select id="queryAllByLimit" resultMap="TaskMap">
+        select
+        <include refid="allColumn"></include>
+        from task
+    </select>
+
+    <!--通过实体作为筛选条件查询-->
+    <select id="queryAll" resultMap="TaskMap">
+        select
+          <include refid="allColumn"></include>
+        from task
+        <trim prefix="where" prefixOverrides="and" suffixOverrides=",">
+            <include refid="commonsValue"></include>
+        </trim>
+    </select>
+
+    <!--通过主键修改数据-->
+    <update id="update">
+        update task
+        <set>
+            <include refid="commonsValue"></include>
+        </set>
+        <where>
+            task_id = #{taskId}
+        </where>
+    </update>
+
+</mapper>

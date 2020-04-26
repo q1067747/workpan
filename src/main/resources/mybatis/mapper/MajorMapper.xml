@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hebtu.mapper.MajorMapper">
+
+    <!--major的映射结果集-->
+    <resultMap type="com.hebtu.entity.Major" id="MajorMap">
+        <result property="majorId" column="major_id" jdbcType="INTEGER"/>
+        <result property="collegeId" column="college_id" jdbcType="INTEGER"/>
+        <result property="majorName" column="major_name" jdbcType="VARCHAR"/>
+    </resultMap>
+    
+    <!--全部字段-->
+    <sql id="allColumn"> major_id, college_id, major_name </sql>
+    
+    <!--添加语句的字段列表-->
+    <sql id="insertColumn">
+        <if test="collegeId != null">
+                college_id,
+        </if>
+        <if test="majorName != null and majorName != ''">
+                major_name,
+        </if>
+    </sql>
+    
+    <!--添加语句的值列表-->
+        <sql id="insertValue">
+        <if test="collegeId != null">
+                #{collegeId},
+        </if>
+        <if test="majorName != null and majorName != ''">
+                #{majorName},
+        </if>
+    </sql>
+    
+    <!--通用对Major各个属性的值的非空判断-->
+    <sql id="commonsValue">
+        <if test="collegeId != null">
+                college_id = #{collegeId},
+        </if>
+        <if test="majorName != null and majorName != ''">
+                major_name = #{majorName},
+        </if>
+    </sql>
+    
+    <!--新增major:哪个字段不为空就添加哪列数据,返回自增主键-->
+    <insert id="insert" keyProperty="majorId" useGeneratedKeys="true">
+        insert into major
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <include refid="insertColumn"/>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <include refid="insertValue"/>
+        </trim>
+    </insert>
+   
+    <!--删除major:通过主键-->
+    <delete id="deleteById">
+        delete from major
+        <where>
+            major_id = #{majorId}
+        </where>
+    </delete>
+    
+    <!--查询单个major-->
+    <select id="queryById" resultMap="MajorMap">
+        select
+        <include refid="allColumn"></include>
+        from major
+        <where>
+            major_id = #{majorId}
+        </where>
+    </select>
+
+    <select id="queryBycollegeId" resultMap="MajorMap">
+        select
+        <include refid="allColumn"></include>
+        from major
+        <where>
+            college_id = #{collegeId}
+        </where>
+    </select>
+
+
+</mapper>

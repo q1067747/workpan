@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+	<meta charset="UTF-8">
+	<meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, shrink-to-fit=no" name="viewport">
+	<title>帮助</title>
+
+	<link rel="stylesheet" href="u-admin/dist/modules/bootstrap/css/bootstrap.min.css">
+	<link rel="stylesheet" href="u-admin/dist/modules/ionicons/css/ionicons.min.css">
+	<link rel="stylesheet" href="u-admin/dist/modules/fontawesome/web-fonts-with-css/css/fontawesome-all.min.css">
+
+	<link rel="stylesheet" href="u-admin/dist/modules/summernote/summernote-lite.css">
+	<link rel="stylesheet" href="u-admin/dist/modules/flag-icon-css/css/flag-icon.min.css">
+	<link rel="stylesheet" href="u-admin/dist/css/demo.css">
+	<link rel="stylesheet" href="u-admin/dist/css/style.css">
+</head>
+
+<body>
+<div id="app">
+	<div class="main-wrapper">
+		<div class="navbar-bg"></div>
+		<div th:replace="commons/bar::#top"></div>
+		<div th:replace="commons/bar::#sidebar(currUri='help',statistics = ${statistics})"></div>
+
+		<div class="main-content">
+			<section class="section">
+				<h1 class="section-header">
+					<div><i class="ion ion-help-buoy"></i> 使用帮助</div>
+				</h1>
+				<div class="row">
+					<div class="col-12 col-sm-6 col-lg-6">
+						<div class="card">
+							<div class="card-header">
+								<h4>用户协议</h4>
+							</div>
+							<div class="card-body">
+								<div id="accordion">
+									<div class="accordion">
+										<div class="accordion-header" data-toggle="collapse" data-target="#panel-body-1" aria-expanded="false">
+											<h4>关于网盘</h4>
+										</div>
+										<div class="accordion-body collapse" id="panel-body-1" data-parent="#accordion">
+											<p style="text-indent: 2em">
+											<p style="text-indent: 2em">这是基于GitHub上的一个开源项目 ---moti-cloud 的基础上开发完成</p>
+											<p style="text-indent: 2em">	这个项目服务于校园中频繁交作业的情况。</p>
+											<p style="text-indent: 2em">	改变了传统的交作业模式：</p>
+											<p style="text-indent: 2em">		原来：作业-->宿舍长-->学习委员-->教师</p>
+											<p style="text-indent: 2em">		现在：作业-->教师  or   作业-->班干部</p>
+											<p style="text-indent: 2em">	以后有时间还会将功能完善，比如：</p>
+											<p style="text-indent: 2em">	-------人员信息修改</p>
+											<p style="text-indent: 2em">	-------预览</p>
+											<p style="text-indent: 2em">	-------移植到fastDFS</p>
+											</p>
+										</div>
+									</div>
+									<div class="accordion">
+										<div class="accordion-header" data-toggle="collapse" data-target="#panel-body-2">
+											<h4>用户的权益</h4>
+										</div>
+										<div class="accordion-body collapse" id="panel-body-2" data-parent="#accordion">
+											<p style="text-indent: 2em">
+												由于服务器的压力，普通用户最多有1024MB（1GB）的存储空间。<br/>
+												且上传的当个文件最大为50MB。莫提网盘保证用户下载文件的速度不作限制。
+											</p>
+											<hr>
+											<small>技术太菜,生活太难了。</small>
+										</div>
+									</div>
+									<div class="accordion">
+										<div class="accordion-header" data-toggle="collapse" data-target="#panel-body-3">
+											<h4>登录与注册</h4>
+										</div>
+										<div class="accordion-body collapse" id="panel-body-3" data-parent="#accordion">
+											<p style="text-indent: 2em">
+												本来也想假如QQ接入的。但是QQ互联认证那里上传身份证信息，我上传的图片
+												可以看清我脸上的毛孔了。还是说我的图片不清晰。。。<br/>
+												虽然最后找客服通过了,但是梁子结下了！
+											</p>
+											<hr>
+										</div>
+									</div>
+									<div class="accordion">
+										<div class="accordion-header" data-toggle="collapse" data-target="#panel-body-4">
+											<h4>上传与下载</h4>
+										</div>
+										<div class="accordion-body collapse" id="panel-body-4" data-parent="#accordion">
+											<p style="text-indent: 2em">
+												切换路径支持：双击目录、点击目录名、鼠标右键菜单（移动端使用长按的方式）三种方式
+											</p>
+											<p style="text-indent: 2em">
+												上传文件需要选定目录（默认为根目录），预览框内展示出当前目录下的所有文件夹。
+												进入想要上传文件的目录后，可以选取文件（支持多文件选取与上传），之后可以全选文件后者勾选指
+												定文件进行上传。等待进度条到达100%时，即上传成功。
+											</p>
+											<p style="text-indent: 2em">
+												可以通过点击文件名、双击文件、鼠标右键菜单（移动端使用长按的方式）三种方式下载文件。如果文件
+												较大，服务器需要足够的时间准备，这时候请耐心等待。
+											</p>
+										</div>
+									</div>
+									<div class="accordion">
+										<div class="accordion-header" data-toggle="collapse" data-target="#panel-body-6">
+											<h4>关于作者</h4>
+										</div>
+										<div class="accordion-body collapse" id="panel-body-6" data-parent="#accordion">
+											</p>
+											现作者：
+											QQ : 1102624408
+											</p>
+											<p>
+												原作者：
+												个人网站：<a href="http://xuewei.world/">莫提</a>
+											</p>
+											<p>
+												bilibili：<a href="https://space.bilibili.com/301320288">我是莫提</a>
+
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</section>
+		</div>
+		<div th:replace="commons/bar::#footer"></div>
+	</div>
+</div>
+<script src="http://libs.baidu.com/jquery/2.1.4/jquery.min.js"></script>
+<script src="u-admin/dist/modules/jquery.min.js"></script>
+<script src="u-admin/dist/modules/popper.js"></script>
+<script src="u-admin/dist/modules/tooltip.js"></script>
+<script src="u-admin/dist/modules/bootstrap/js/bootstrap.min.js"></script>
+<script src="u-admin/dist/modules/nicescroll/jquery.nicescroll.min.js"></script>
+<script src="u-admin/dist/modules/scroll-up-bar/dist/scroll-up-bar.min.js"></script>
+<script src="u-admin/dist/js/sa-functions.js"></script>
+<script src="u-admin/dist/modules/chart.min.js"></script>
+<script src="u-admin/dist/modules/summernote/summernote-lite.js"></script>
+<script src="u-admin/dist/js/scripts.js"></script>
+<script src="u-admin/dist/js/custom.js"></script>
+<script src="u-admin/dist/js/demo.js"></script>
+<script src="u-admin/dist/modules/chart.min.js"></script>
+</body>
+</html>

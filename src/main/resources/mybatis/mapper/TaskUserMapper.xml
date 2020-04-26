@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hebtu.mapper.TaskUserMapper">
+
+    <!--task_user的映射结果集-->
+    <resultMap type="com.hebtu.entity.TaskUser" id="TaskUserMap">
+        <result property="taskId" column="task_id" jdbcType="INTEGER"/>
+        <result property="userId" column="user_id" jdbcType="INTEGER"/>
+        <result property="myFileId" column="my_file_id" jdbcType="INTEGER"/>
+    </resultMap>
+    
+    <!--全部字段-->
+    <sql id="allColumn"> task_id, user_id, my_file_id </sql>
+    
+    <!--添加语句的字段列表-->
+    <sql id="insertColumn">
+        <if test="taskId != null">
+                task_id,
+        </if>
+        <if test="userId != null">
+                user_id,
+        </if>
+        <if test="myFileId != null">
+                my_file_id,
+        </if>
+    </sql>
+    
+    <!--添加语句的值列表-->
+        <sql id="insertValue">
+        <if test="taskId != null">
+                #{taskId},
+        </if>
+        <if test="userId != null">
+                #{userId},
+        </if>
+        <if test="myFileId != null">
+                #{myFileId},
+        </if>
+    </sql>
+    
+    <!--通用对TaskUser各个属性的值的非空判断-->
+    <sql id="commonsValue">
+        <if test="taskId != null">
+                task_id = #{taskId},
+        </if>
+        <if test="userId != null">
+                user_id = #{userId},
+        </if>
+        <if test="myFileId != null">
+                my_file_id = #{myFileId},
+        </if>
+    </sql>
+    
+    <!--新增task_user:哪个字段不为空就添加哪列数据,返回自增主键-->
+    <insert id="insert" keyProperty="" useGeneratedKeys="true">
+        insert into task_user
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <include refid="insertColumn"/>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <include refid="insertValue"/>
+        </trim>
+    </insert>
+
+    <!--删除task_user:通过主键-->
+    <delete id="deleteKong">
+        delete from task_user
+        <where>
+            task_id= #{taskId} and user_id = #{userId} and my_file_id is null;
+        </where>
+    </delete>
+    <!--删除task_user:通过主键-->
+    <delete id="deleteByTaskId">
+        delete from task_user
+        <where>
+            task_id= #{taskId}
+        </where>
+    </delete>
+    <!--查询单个task_user-->
+    <select id="queryByTaskId" resultMap="TaskUserMap">
+        select
+        <include refid="allColumn"></include>
+        from task_user
+        <where>
+            task_id = #{taskId}
+        </where>
+    </select>
+
+    <select id="queryByUserId" resultMap="TaskUserMap">
+        select
+        <include refid="allColumn"></include>
+        from task_user
+        <where>
+            user_id = #{userId}
+        </where>
+    </select>
+
+    <!--查询所有task_user-->
+    <select id="queryAllByLimit" resultMap="TaskUserMap">
+        select
+        <include refid="allColumn"></include>
+        from task_user
+    </select>
+
+    <!--通过实体作为筛选条件查询-->
+    <select id="queryAll" resultMap="TaskUserMap">
+        select
+          <include refid="allColumn"></include>
+        from task_user
+        where user_id=#{userId} and task_id=#{taskId}
+    </select>
+    <select id="queryByUAT" resultMap="TaskUserMap">
+        select
+        <include refid="allColumn"></include>
+        from task_user
+        where user_id=#{userId} and task_id=#{taskId}
+    </select>
+
+    <!--通过主键修改数据-->
+    <update id="update">
+        update task_user
+        <set>
+            <include refid="commonsValue"></include>
+        </set>
+        <where>
+            task_id = #{taskId}
+        </where>
+    </update>
+
+</mapper>

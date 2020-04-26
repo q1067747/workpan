@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+	<meta charset="UTF-8">
+	<meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, shrink-to-fit=no" name="viewport">
+	<title>创建作业</title>
+
+	<link rel="stylesheet" href="u-admin/dist/modules/bootstrap/css/bootstrap.min.css">
+	<link rel="stylesheet" href="u-admin/dist/modules/ionicons/css/ionicons.min.css">
+	<link rel="stylesheet" href="u-admin/dist/modules/fontawesome/web-fonts-with-css/css/fontawesome-all.min.css">
+
+	<link rel="stylesheet" href="u-admin/dist/modules/summernote/summernote-lite.css">
+	<link rel="stylesheet" href="u-admin/dist/modules/flag-icon-css/css/flag-icon.min.css">
+	<link rel="stylesheet" href="u-admin/dist/css/demo.css">
+	<link rel="stylesheet" href="u-admin/dist/css/style.css">
+	<link rel="stylesheet" href="plug-ins/xcConfirm/css/xcConfirm.css">
+	<link rel="stylesheet" href="plug-ins/context-menu/css/contextMenu.css">
+	<style>
+		.files-items{
+			margin-top: -20px;
+			border-bottom: 1px dashed #bdc3c7;
+			border-top: 1px dashed #bdc3c7;
+		}
+		.files-items:hover{
+			background: #F4FBFF;
+		}
+	</style>
+
+</head>
+
+<body>
+<!-- 模态框（Modal） -->
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h4 class="modal-title float-left" id="myModalLabel">创建作业</h4>
+				<button type="button" class="close" data-dismiss="modal" aria-hidden="true" onclick="tohide()">&times;</button>
+			</div>
+			<div class="modal-body row">
+				<div class="col-12 col-sm-12 col-lg-12">
+					<input id="taskname" type="text" class="form-control" placeholder="作业名称">
+					学院
+					<select id="mycollege" class="form-control" th:each="college:${colleges}">
+						<option th:selected="${college.collegeId==session.loginUser.collegeId?true:false}" th:value="${college.collegeId}" th:text="${college.collegeName}">1</option>
+					</select>
+					专业
+					<select id="mymajor" class="form-control" th:each="major:${majors}">
+						<option th:selected="${major.majorId==session.loginUser.majorId?true:false}" th:value="${major.majorId}" th:text="${major.majorName}"></option>
+					</select>
+					年级
+					<select id="mygrade" class="form-control">
+						<option  th:each="g:${grade}" th:value="${g}" th:text="${g}+'级'"></option>
+					</select>
+					<textarea id="mynotice" class="form-control" rows="3" placeholder="备注"></textarea>
+					有效时间（天）
+					<input id="myday" type="text" οnkeyup="this.value=this.value.replace(/\D/g,'')" placeholder="7" th:value="7">
+				</div>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-default" data-dismiss="modal" onclick="tohide()">关闭</button>
+				<button type="button" class="btn btn-primary" onclick="submitTask()">提交</button>
+			</div>
+		</div><!-- /.modal-content -->
+	</div><!-- /.modal -->
+</div>
+<div id="app">
+	<div class="main-wrapper">
+		<div class="navbar-bg"></div>
+		<div th:replace="commons/bar::#top"></div>
+		<div th:replace="commons/bar::#sidebar(currUri='ctask',statistics = ${statistics})"></div>
+		<div class="main-content">
+			<section class="section">
+				<h1 class="section-header">
+					<div><i class="ion ion-folder"></i> 我发布的作业 </div>
+				</h1>
+				<div class="row">
+					<div class="col-12 col-sm-12 col-lg-12">
+						<div class="card">
+						<div class="card-body">
+							<div class="row" style="margin-top: -10px;">
+								<div class="col-12 col-sm-12 col-lg-12 table-responsive">
+									<table class="table tab-bordered text-nowrap" id="files-table">
+										<tr id="files-table-title" class="empty-space">
+											<th></th>
+											<th>作业名称</th>
+											<th>创建人</th>
+											<th>作业编号</th>
+											<th>截止时间</th>
+											<th></th>
+										</tr>
+										<tr th:each="t:${tasks}" class="files-items">
+											<td><span style="display: none"></span>
+												<i style="font-size: 24px;color: #3498db"  class="icon ion-document-text"></i>
+											</td>
+											<td>
+												<a th:href="@{/ctask-files(taskId=${t.getTaskId()})}" style="font-weight: 700;color: black" th:text="${t.taskName}"></a>
+											</td>
+											<td style="font-weight: 300" th:text="${t.createUserName}" ></td>
+											<td style="font-weight: 300" th:text="${t.taskId}" ></td>
+											<td style="font-weight: 300" th:text="${#dates.format(t.deadTime,'yyyy-MM-dd HH:mm')}" ></td>
+											<td><a class="btn btn-danger btn-sm" th:href="@{/deleteTask(taskId=${t.getTaskId()})}">删除</a></td>
+										</tr>
+									</table>
+								</div>
+							</div>
+
+							<div class="row">
+								<div class="col-12">
+									<div class="float-right">
+										<button class="btn btn-primary btn-lg" data-toggle="modal" data-target="#myModal">创建作业</button>
+									</div>
+								</div>
+							</div>
+
+						</div>
+					</div>
+					</div>
+				</div>
+			</section>
+		</div>
+		<div th:replace="commons/bar::#footer"></div>
+	</div>
+</div>
+<script src="http://libs.baidu.com/jquery/2.1.4/jquery.min.js"></script>
+<script>
+	function tohide(){$('#myModal').modal("hide");}
+	function submitTask(){
+		var taskname=$('#taskname').val();
+		var mycollege=$('#mycollege').val();
+		var mymajor=$('#mymajor').val();
+		var mygrade=$('#mygrade').val();
+		var mynotice=$('#mynotice').val();
+		var myday=$('#myday').val();
+		if(taskname!=''&&taskname!=null){
+			$.ajax({
+				url:"/createTask",
+				type:"GET",
+				data:{
+					taskName:taskname,
+					grade:mygrade,
+					major:mymajor,
+					notice:mynotice,
+					deadtime:myday
+				}
+			});
+			tohide();
+			alert("作业："+taskname+"创建成功！");
+			window.location.reload()
+		}else{
+			alert("请输入作业名")
+		}
+	}
+</script>
+<script src="plug-ins/context-menu/js/jquery.contextMenu.min.js"></script>
+<script src="plug-ins/xcConfirm/js/xcConfirm.js"></script>
+<script src="u-admin/dist/modules/jquery.min.js"></script>
+<script src="u-admin/dist/modules/popper.js"></script>
+<script src="u-admin/dist/modules/tooltip.js"></script>
+<script src="u-admin/dist/modules/bootstrap/js/bootstrap.min.js"></script>
+<script src="u-admin/dist/modules/nicescroll/jquery.nicescroll.min.js"></script>
+<script src="u-admin/dist/modules/scroll-up-bar/dist/scroll-up-bar.min.js"></script>
+<script src="u-admin/dist/js/sa-functions.js"></script>
+<script src="u-admin/dist/modules/chart.min.js"></script>
+<script src="u-admin/dist/modules/summernote/summernote-lite.js"></script>
+<script src="u-admin/dist/js/scripts.js"></script>
+<script src="u-admin/dist/js/custom.js"></script>
+<script src="u-admin/dist/js/demo.js"></script>
+<script src="u-admin/dist/modules/chart.min.js"></script>
+</body>
+</html>
