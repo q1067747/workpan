@@ -53,7 +53,7 @@ spring:
   # 邮件相关
   mail:
     host: smtp.qq.com
-    username: 1102624408@qq.com
+    username: XX@qq.com
     #授权密码
     password: gcjlotqdweivbaha
     default-encoding: utf-8
